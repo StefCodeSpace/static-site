@@ -409,13 +409,51 @@
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  .page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.hd-title{
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:-.3px;
+  color:#F0F6FF;
+}
+
+.top-link{
+  color:#ffffff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:600;
+  padding:8px 12px;
+  border-radius:8px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.2);
+  white-space:nowrap;
+  transition:background .2s ease,border-color .2s ease;
+}
+
+.top-link:hover{
+  color:#ffffff;
+  background:rgba(255,255,255,0.14);
+  border-color:rgba(255,255,255,0.35);
+}
 </style>
 </head>
 <body>
 
 <header>
   <div class="eyebrow">Reference · June 2026</div>
-  <h1>D365 <span>Success by Design</span> — Taxonomy</h1>
+  <div class="page-header">
+  <div class="hd-title">D365 <span>Success by Design</span> — Taxonomy</div>
+  <a class="top-link" href="index.html">← Delivery Framework</a>
+</div>
   <h3><a href="index.html">Go to SbD Delivery Framework</a></h3>
   <p>Key terms, work item types, hierarchy levels, SbD phases, and legacy equivalents across Sure Step, SAP/ASAP, Agile, SAFe, and traditional PMBOK frameworks.</p>
 </header>
