@@ -122,12 +122,66 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .vc-n{font-size:14px;font-weight:800;line-height:1;margin-bottom:4px;}
 .vc-t{font-size:9.5px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.3;}
 .vc-d{font-size:8.5px;color:var(--muted);line-height:1.55;}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.meta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #27f0d0;
+}
+
+.title-block h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.top-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.top-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+  
 </style>
 </head>
 <body>
 
-<div class="hd-title">SbD Delivery Framework — Source-to-Pay / Accounts Payable</div>
-<div class="hd-sub">Dynamics 365 &nbsp;·&nbsp; ADO Demo &nbsp;·&nbsp; Phases aligned to SbD Delivery Plan &nbsp;·&nbsp; <a href="SbD_Taxonomy.html">Go to SbD Taxonomy</a></div>
+<div class="page-header">
+  <div class="hd-title">SbD Delivery Framework — Source-to-Pay / Accounts Payable</div>
+  <a class="top-link" href="SbD_Taxonomy.html">Taxonomy →</a>
+</div>
+<div class="hd-sub">Dynamics 365 &nbsp;·&nbsp; ADO Demo &nbsp;·&nbsp; Phases aligned to SbD Delivery Plan</div>
 <div class="hd-tags">
   <span class="tag" style="color:var(--c-plan);border-color:var(--c-plan)">Delivery Plan</span>
   <span class="tag" style="color:var(--c-bpc);border-color:var(--c-bpc)">BPC / Why Tree</span>
