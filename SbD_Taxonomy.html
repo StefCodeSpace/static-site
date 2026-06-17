@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D365 Success by Design — Taxonomy</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap');
+
+  :root {
+    --bg:        #0d1117;
+    --surface:   #161b22;
+    --border:    #21262d;
+    --border2:   #30363d;
+    --accent:    #0078d4;   /* MS blue */
+    --accent2:   #50e3c2;   /* teal highlight */
+    --accent3:   #f7c948;   /* amber — legacy / rebranding */
+    --accent4:   #e06c75;   /* coral — deprecated / note */
+    --text:      #e6edf3;
+    --text2:     #8b949e;
+    --text3:     #58a6ff;
+    --why:       #3399ff;
+    --what:      #9b59b6;
+    --goals:     #27ae60;
+    --plan:      #e67e22;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0 0 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #0f1f33 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 40px 60px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg,
+      transparent, transparent 79px,
+      rgba(0,120,212,.06) 80px
+    );
+    pointer-events: none;
+  }
+  header .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  header h1 span { color: var(--accent); }
+  header p {
+    color: var(--text2);
+    font-weight: 300;
+    max-width: 680px;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    display: flex;
+    gap: 0;
+    padding: 0 60px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+  }
+  nav button {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text2);
+    cursor: pointer;
+    padding: 14px 18px;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+  /* ── SECTIONS ── */
+  section { display: none; padding: 40px 60px; }
+  section.active { display: block; }
+
+  .section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 6px;
+  }
+  .section-head {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    color: var(--text2);
+    font-weight: 300;
+    max-width: 720px;
+    margin-bottom: 32px;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color .15s;
+  }
+  .card:hover { border-color: var(--border2); }
+  .card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.55;
+  }
+
+  /* ── TREE DIAGRAM ── */
+  .tree-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .tree-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .tree-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .tree-header h2 { font-size: 17px; font-weight: 700; }
+  .tree-header .tree-subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  .tree-nodes { font-family: 'IBM Plex Mono', monospace; }
+  .tree-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tree-row:last-child { border-bottom: none; }
+  .tree-row .indent { color: var(--border2); flex-shrink: 0; min-width: 20px; }
+  .tree-row .level-badge {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tree-row .wit-name {
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+    min-width: 130px;
+  }
+  .tree-row .wit-desc {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.4;
+  }
+  .tree-row .wit-example {
+    font-size: 11px;
+    margin-left: auto;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,.04);
+    color: var(--text2);
+    white-space: nowrap;
+    align-self: center;
+  }
+
+  /* Colors per tree */
+  .why .level-badge  { background: rgba(51,153,255,.15); color: var(--why); }
+  .what .level-badge { background: rgba(155,89,182,.15); color: var(--what); }
+  .goals .level-badge { background: rgba(39,174,96,.15); color: var(--goals); }
+  .plan .level-badge { background: rgba(230,126,34,.15); color: var(--plan); }
+
+  /* ── PHASES STRIP ── */
+  .phases {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .phase {
+    flex: 1;
+    padding: 18px 16px;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .phase:last-child { border-right: none; }
+  .phase:hover { background: rgba(255,255,255,.04); }
+  .phase-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+  .phase-name { font-size: 14px; font-weight: 700; }
+  .phase-sure { font-size: 11px; color: var(--accent3); margin-top: 4px; font-style: italic; }
+  .phase-desc { font-size: 12px; color: var(--text2); margin-top: 6px; }
+
+  /* ── REBRAND TABLE ── */
+  .rebrand-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+  .rebrand-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    padding: 10px 14px;
+    text-align: left;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border2);
+    position: sticky;
+    top: 48px;
+  }
+  .rebrand-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  .rebrand-table tr:hover td { background: rgba(255,255,255,.02); }
+  .sbd-term {
+    font-weight: 700;
+    color: var(--accent2);
+  }
+  .legacy-term {
+    color: var(--accent3);
+    font-style: italic;
+  }
+  .framework-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    margin: 2px 2px 2px 0;
+  }
+  .notes-cell { color: var(--text2); font-size: 12px; }
+
+  /* ── WIT TABLE ── */
+  .wit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+  .wit-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    padding: 10px 14px;
+    text-align: left;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border2);
+  }
+  .wit-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .wit-table tr:hover td { background: rgba(255,255,255,.02); }
+  .cat-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .cat-process  { background: rgba(51,153,255,.12);  color: var(--why); }
+  .cat-deliv    { background: rgba(155,89,182,.12);  color: #c39bd3; }  /* all Req/Deliverables backlog */
+  .cat-config   { background: rgba(155,89,182,.12);  color: #c39bd3; }  /* alias */
+  .cat-dev      { background: rgba(155,89,182,.12);  color: #c39bd3; }  /* alias */
+  .cat-docs     { background: rgba(155,89,182,.12);  color: #c39bd3; }  /* alias */
+  .cat-pm       { background: rgba(230,126,34,.12);  color: var(--plan); }
+  .cat-test     { background: rgba(80,227,194,.12);  color: var(--accent2); }
+
+  /* ── FIELDS ── */
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .field-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .field-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .field-type {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,.06);
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  .field-desc { font-size: 12px; color: var(--text2); line-height: 1.45; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  h4.sub-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 24px 0 12px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .callout {
+    background: rgba(0,120,212,.08);
+    border: 1px solid rgba(0,120,212,.25);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 20px;
+  }
+  .callout strong { color: var(--text); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Reference · June 2026</div>
+  <h1>D365 <span>Success by Design</span> — Taxonomy</h1>
+  <p>Key terms, work item types, hierarchy levels, SbD phases, and legacy equivalents across Sure Step, SAP/ASAP, Agile, SAFe, and traditional PMBOK frameworks.</p>
+</header>
+
+<nav>
+  <button class="active" onclick="show('overview')">Overview</button>
+  <button onclick="show('trees')">Four Trees</button>
+  <button onclick="show('wits')">Work Item Types</button>
+  <button onclick="show('phases')">Phases</button>
+  <button onclick="show('rebrand')">Legacy Mapping</button>
+  <button onclick="show('fields')">Key Fields</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     OVERVIEW
+═══════════════════════════════════════════════════════════ -->
+<section id="overview" class="active">
+  <div class="section-title">Section 01</div>
+  <div class="section-head">Framework Overview</div>
+  <div class="section-sub">Success by Design (SbD) is Microsoft's implementation framework for Dynamics 365, replacing Sure Step. It organises delivery around four conceptual "trees" in Azure DevOps, each answering a different question about the project.</div>
+
+  <div class="callout">
+    <strong>Why this matters for DAC:</strong> SbD borrows vocabulary from Agile, SAFe, traditional ERP (ASAP/Sure Step), APQC, and PMBOK — but renames many concepts. Understanding the lineage avoids confusion when bridging the ADO BPC template with DAC's own PMO governance language.
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-label" style="color:var(--why)">WHY Tree</span>
+      <h3>Business Process Catalog (BPC)</h3>
+      <p>The <em>why</em> — a hierarchical, system-agnostic catalogue of every business process the organisation runs. Microsoft-published and versioned. The strategic anchor for all traceability.</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--what)">WHAT Tree</span>
+      <h3>Deliverables Catalogue</h3>
+      <p>The <em>what</em> — work products required to realise the BPC scenarios: Configurations, Enhancements, Integrations, Migrations, Documentation, Security, Reports, and more.</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--goals)">GOALS Tree</span>
+      <h3>Objectives</h3>
+      <p>Goals set for a Sprint or Tollgate review, owned by functional workstreams. Structured under audience tier, functional area, and cadence-level (Project / Tollgate / Sprint) folders.</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--plan)">HOW / WHEN Tree</span>
+      <h3>SbD Delivery Plan</h3>
+      <p>The timeline backbone — Phases, Workshops, Tasks, and Documentation aligned to the SbD lifecycle phases (Strategize → Initiate → Implement → Prepare → Operate).</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--accent2)">ADO Structure</span>
+      <h3>Azure DevOps as Backbone</h3>
+      <p>All four trees live in ADO as a single portfolio backlog. The <em>Tree</em> WIT delineates each tree's root. Area paths are shared — tree separation is by parent WIT title, not area path.</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--accent3)">Traceability</span>
+      <h3>Full Chain: Why → What → Test</h3>
+      <p>Objective → BPC Scenario → SOP Documentation → Test Case. Bugs link back to BPC Scenarios via Related Links. This is the long-term strategic value of ADO in the SbD stack.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <h4 class="sub-heading">Core Vocabulary at a Glance</h4>
+  <div class="card-grid">
+    <div class="card">
+      <h3>Fit-to-Standard</h3>
+      <p>SbD's guiding philosophy: default to standard D365 processes and adapt the business, rather than customising the system. This is a design principle, not a replacement for Fit/Gap analysis — SbD still performs Fit/Gap (via the Fit Gap Status field on every Scenario). The two coexist: your starting bias is "fit to standard first."</p>
+    </div>
+    <div class="card">
+      <h3>Scenario Board</h3>
+      <p>A visual facilitation tool used in discovery workshops to map the end-to-end process with stakeholders. Equivalent to a JAD session output or high-level use-case diagram.</p>
+    </div>
+    <div class="card">
+      <h3>Tollgate</h3>
+      <p>A go/no-go review checkpoint at the end of an Iteration (delivery period). It is the <em>gate event</em>, not the time container — the Iteration holds the Sprints, the Tollgate reviews outcomes against Objectives. <strong>≈ Stage Gate (PMBOK) / Phase Gate (Sure Step).</strong> DAC's PMO calls this "Stage Gate."</p>
+    </div>
+    <div class="card">
+      <h3>Storyline / Happy Path</h3>
+      <p>The primary end-to-end scenario walkthrough agreed in the Scenario Board workshop. Becomes the basis for the Storyline Design Review workshop (fit-to-standard demo).</p>
+    </div>
+    <div class="card">
+      <h3>RAID (Distributed)</h3>
+      <p>SbD doesn't use a single RAID log. Instead, Risks, Issues, Assumptions, Decisions, and Change Requests are individual ADO work item types with their own fields and backlogs.</p>
+    </div>
+    <div class="card">
+      <h3>APQC Mapping</h3>
+      <p>Each BPC Process item carries optional APQC ID and APQC Description fields, anchoring the process to the industry-standard American Productivity &amp; Quality Center framework.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     FOUR TREES
+═══════════════════════════════════════════════════════════ -->
+<section id="trees">
+  <div class="section-title">Section 02</div>
+  <div class="section-head">The Four ADO Trees</div>
+  <div class="section-sub">Each tree is rooted by a <em>Tree</em> WIT in the ADO portfolio backlog. The BPC and Deliverables trees are content-rich; the Objectives and Delivery Plan trees are project-management structures.</div>
+
+  <!-- WHY TREE -->
+  <div class="tree-panel why">
+    <div class="tree-header">
+      <div class="tree-icon" style="background:rgba(51,153,255,.15); color:var(--why)">🗂</div>
+      <div>
+        <h2 style="color:var(--why)">WHY Tree — Business Process Catalog (BPC)</h2>
+        <div class="tree-subtitle">Root WIT: <strong>Tree</strong> → "Business Process Catalog (Why)" · Microsoft-authored, version-controlled</div>
+      </div>
+    </div>
+    <div class="tree-nodes">
+      <div class="tree-row why">
+        <div class="indent">L0</div>
+        <div class="level-badge">Tree</div>
+        <div class="wit-name" style="color:var(--why)">Tree</div>
+        <div class="wit-desc">Single root node delineating the BPC tree from other trees in the same backlog. Title: "Business Process Catalog (Why)".</div>
+      </div>
+      <div class="tree-row why">
+        <div class="indent">L1</div>
+        <div class="level-badge">End to end</div>
+        <div class="wit-name">End to end</div>
+        <div class="wit-desc">Top-level business domain. System-agnostic. E.g., "Acquire to dispose", "Source to pay", "Hire to retire". <span style="color:var(--accent3)">≈ SAP: Business Scenario / APQC: Category</span></div>
+        <div class="wit-example">e.g. Acquire to dispose</div>
+      </div>
+      <div class="tree-row why">
+        <div class="indent">L2</div>
+        <div class="level-badge">Process area</div>
+        <div class="wit-name">Process area</div>
+        <div class="wit-desc">Second-level grouping within an end-to-end domain. <span style="color:var(--accent3)">≈ SAP: Business Process Group / APQC: Process Group</span></div>
+        <div class="wit-example">e.g. Acquire assets</div>
+      </div>
+      <div class="tree-row why">
+        <div class="indent">L3</div>
+        <div class="level-badge">Process</div>
+        <div class="wit-name">Process</div>
+        <div class="wit-desc">Third-level, still system-agnostic. Describes <em>what</em> the business does regardless of application. <span style="color:var(--accent3)">≈ APQC: Process / SAP: Business Process</span></div>
+        <div class="wit-example">e.g. Budget fixed assets</div>
+      </div>
+      <div class="tree-row why">
+        <div class="indent">L4</div>
+        <div class="level-badge">Scenario</div>
+        <div class="wit-name" style="color:#3399ff">Scenario ★</div>
+        <div class="wit-desc">Application-specific — names the D365 app variant. Carries Scope, Fit Gap, SbD phase, menu path. The primary unit of traceability. <span style="color:var(--accent3)">≈ User Story (Agile) / Process Step (SAP ASAP)</span></div>
+        <div class="wit-example">e.g. Budget fixed assets in D365 BC</div>
+      </div>
+      <div class="tree-row why">
+        <div class="indent">L5</div>
+        <div class="level-badge">System process</div>
+        <div class="wit-name">System process</div>
+        <div class="wit-desc">Form-level granularity — each form/page used in completing a Scenario. <span style="color:var(--accent3)">≈ Sub-task (Agile) / Transaction (SAP)</span></div>
+        <div class="wit-example">e.g. Fixed assets setup form</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT TREE -->
+  <div class="tree-panel what">
+    <div class="tree-header">
+      <div class="tree-icon" style="background:rgba(155,89,182,.15); color:var(--what)">📦</div>
+      <div>
+        <h2 style="color:var(--what)">WHAT Tree — Deliverables Catalogue</h2>
+        <div class="tree-subtitle">Root WIT: <strong>Tree</strong> → "Deliverables (What)" · Structured by Functional Area groupings</div>
+      </div>
+    </div>
+    <div class="tree-nodes">
+      <div class="tree-row what">
+        <div class="indent">L0</div>
+        <div class="level-badge">Tree</div>
+        <div class="wit-name" style="color:var(--what)">Tree</div>
+        <div class="wit-desc">Root node. Title: "Deliverables (What)".</div>
+      </div>
+      <div class="tree-row what">
+        <div class="indent">L1</div>
+        <div class="level-badge">Functional area</div>
+        <div class="wit-name">Functional area</div>
+        <div class="wit-desc">Organises deliverables by department/capability: Finance, Supply Chain, HR, Operations etc. <span style="color:var(--accent3)">≈ Work Package (PMBOK) / Module (ERP)</span></div>
+        <div class="wit-example">e.g. Accounts Payable</div>
+      </div>
+      <div class="tree-row what">
+        <div class="indent">L2+</div>
+        <div class="level-badge">Deliverable WITs</div>
+        <div class="wit-name">Deliverable types</div>
+        <div class="wit-desc">One of 14 typed work products: <strong>Configuration, Enhancement, Integration, Migration, Documentation, Security, Report, Workflow, Job, Environment, Infrastructure, User interface, Testing, Deliverable</strong>. Each carries type-specific fields.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOALS TREE -->
+  <div class="tree-panel goals">
+    <div class="tree-header">
+      <div class="tree-icon" style="background:rgba(39,174,96,.15); color:var(--goals)">🎯</div>
+      <div>
+        <h2 style="color:var(--goals)">GOALS Tree — Objectives</h2>
+        <div class="tree-subtitle">Root WIT: <strong>Tree</strong> → "Objectives (Goals)" · Goals scoped to functional workstreams, grouped by project cadence</div>
+      </div>
+    </div>
+    <div class="tree-nodes">
+      <div class="tree-row goals">
+        <div class="indent">L0</div>
+        <div class="level-badge">Tree</div>
+        <div class="wit-name" style="color:var(--goals)">Tree</div>
+        <div class="wit-desc">Root node. Title: "Objectives (Goals)".</div>
+      </div>
+      <div class="tree-row goals">
+        <div class="indent">L1</div>
+        <div class="level-badge">Folder</div>
+        <div class="wit-name">Folder (audience)</div>
+        <div class="wit-desc">Top-level grouping by audience tier: <strong>Executive</strong> (cross-project goals) and <strong>Functional areas</strong> (workstream-level goals).</div>
+      </div>
+      <div class="tree-row goals">
+        <div class="indent">L2</div>
+        <div class="level-badge">Folder</div>
+        <div class="wit-name">Folder (area)</div>
+        <div class="wit-desc">Functional area sub-grouping under Functional areas: Finance, Operations, Supply Chain etc.</div>
+        <div class="wit-example">e.g. Finance → Accounting</div>
+      </div>
+      <div class="tree-row goals">
+        <div class="indent">L3</div>
+        <div class="level-badge">Folder</div>
+        <div class="wit-name">Folder (sub-area)</div>
+        <div class="wit-desc">Further sub-grouping within a functional area (e.g. Accounting → Asset financials, Inventory valuation).</div>
+      </div>
+      <div class="tree-row goals">
+        <div class="indent">L4</div>
+        <div class="level-badge">Folder</div>
+        <div class="wit-name" style="color:var(--accent3)">Project / Tollgate / Sprint</div>
+        <div class="wit-desc">Three cadence-level folder variants sit at this level, mirroring the iteration path hierarchy: <strong>Project</strong> (top-level container), <strong>Tollgate</strong> (review checkpoint grouping), <strong>Sprint</strong> (iteration-level). Each appears as a separate folder under its parent sub-area.</div>
+        <div class="wit-example">Project &gt; Tollgate &gt; Sprint</div>
+      </div>
+      <div class="tree-row goals">
+        <div class="indent">L5</div>
+        <div class="level-badge">Objective</div>
+        <div class="wit-name">Objective</div>
+        <div class="wit-desc">A measurable goal set for a Sprint or Tollgate review. Contains Postmortem field for retrospective notes on close. <span style="color:var(--accent3)">≈ Sprint Goal (Scrum) / PI Objective (SAFe)</span></div>
+        <div class="wit-example">Postmortem field on close</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERY PLAN TREE -->
+  <div class="tree-panel plan">
+    <div class="tree-header">
+      <div class="tree-icon" style="background:rgba(230,126,34,.15); color:var(--plan)">🗓</div>
+      <div>
+        <h2 style="color:var(--plan)">HOW/WHEN Tree — SbD Delivery Plan</h2>
+        <div class="tree-subtitle">Root WIT: <strong>Tree</strong> → "Success by Design Delivery Plan" · Workshop and task sequences per end-to-end</div>
+      </div>
+    </div>
+    <div class="tree-nodes">
+      <div class="tree-row plan">
+        <div class="indent">L0</div>
+        <div class="level-badge">Tree</div>
+        <div class="wit-name" style="color:var(--plan)">Tree</div>
+        <div class="wit-desc">Root: "Success by Design Delivery Plan".</div>
+      </div>
+      <div class="tree-row plan">
+        <div class="indent">L1</div>
+        <div class="level-badge">Folder</div>
+        <div class="wit-name">Folder (Phase)</div>
+        <div class="wit-desc">SbD lifecycle phase buckets: Strategize, Initiate, Implement, Prepare, Operate.</div>
+      </div>
+      <div class="tree-row plan">
+        <div class="indent">L2</div>
+        <div class="level-badge">Folder/Phase</div>
+        <div class="wit-name">Process grouping</div>
+        <div class="wit-desc">End-to-end-aligned sub-folders (e.g. "Acquire to dispose", "Source to pay"). Contains the Workshop+Task sequences per E2E.</div>
+      </div>
+      <div class="tree-row plan">
+        <div class="indent">L3</div>
+        <div class="level-badge">Workshop ★</div>
+        <div class="wit-name">Workshop</div>
+        <div class="wit-desc">A key facilitated meeting. Two standard types per E2E: (1) Scenario Board Discovery, (2) Storyline Design Review. Carries Agenda, Key Questions, Workshop Assumptions. <span style="color:var(--accent3)">≈ CRP (SAP) / JAD Session</span></div>
+        <div class="wit-example">xx.01 Discovery / xx.02 Design Review</div>
+      </div>
+      <div class="tree-row plan">
+        <div class="indent">L4</div>
+        <div class="level-badge">Task</div>
+        <div class="wit-name">Task</div>
+        <div class="wit-desc">Action required to advance a deliverable or workshop. Carries estimate, remaining work, completed work. <span style="color:var(--accent3)">≈ Task (PMBOK/Agile)</span></div>
+      </div>
+      <div class="tree-row plan">
+        <div class="indent">L4</div>
+        <div class="level-badge">Documentation</div>
+        <div class="wit-name">Documentation</div>
+        <div class="wit-desc">A named document deliverable in the plan (e.g. "Acquire to dispose design document"). <span style="color:var(--accent3)">≈ SOP / BPD / Design Document</span></div>
+        <div class="wit-example">xx.02.004 Design document</div>
+      </div>
+      <div class="tree-row plan">
+        <div class="indent">L1</div>
+        <div class="level-badge">Phase</div>
+        <div class="wit-name">Phase</div>
+        <div class="wit-desc">Partner-defined project phases placed in the Delivery Plan for timeline visibility. <span style="color:var(--accent3)">≈ Project Phase (PMBOK) / Sprint/PI header</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     WORK ITEM TYPES
+═══════════════════════════════════════════════════════════ -->
+<section id="wits">
+  <div class="section-title">Section 03</div>
+  <div class="section-head">Work Item Type (WIT) Reference</div>
+  <div class="section-sub">All 37 WITs in the CMMI-BPC-Trial process template. Custom WITs are prefixed "MSBPC." in their reference names. Epic, Feature, and User Story are <em>disabled</em> — replaced by the BPC hierarchy.</div>
+
+  <div class="callout">
+    <strong>Badge colour key:</strong> <span style="background:rgba(51,153,255,.12);color:#3399ff;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:11px">BPC Hierarchy</span> — process tree levels &nbsp;|&nbsp; <span style="background:rgba(155,89,182,.12);color:#c39bd3;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:11px">Deliverable</span> — all WITs in the Requirements / Deliverables backlog &nbsp;|&nbsp; <span style="background:rgba(230,126,34,.12);color:#e67e22;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:11px">PM / Governance</span> — project management, RAID, and support WITs &nbsp;|&nbsp; <span style="background:rgba(80,227,194,.12);color:#50e3c2;padding:2px 7px;border-radius:3px;font-family:monospace;font-size:11px">Test</span> — ADO-native test management hierarchy
+  </div>
+  <table class="wit-table">
+    <thead>
+      <tr>
+        <th>WIT Name</th>
+        <th>Category</th>
+        <th>Backlog</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- PROCESS HIERARCHY -->
+      <tr><td><strong>Tree</strong></td><td><span class="cat-badge cat-process">BPC Hierarchy</span></td><td>Portfolio / Highest</td><td>Root node separating each of the four trees in the combined backlog.</td></tr>
+      <tr><td><strong>End to end</strong></td><td><span class="cat-badge cat-process">BPC Hierarchy</span></td><td>Portfolio / Levels</td><td>L1 — top-level business domain (e.g. Acquire to dispose). System-agnostic.</td></tr>
+      <tr><td><strong>Process area</strong></td><td><span class="cat-badge cat-process">BPC Hierarchy</span></td><td>Portfolio / Levels</td><td>L2 — business process group within an end-to-end domain.</td></tr>
+      <tr><td><strong>Process</strong></td><td><span class="cat-badge cat-process">BPC Hierarchy</span></td><td>Portfolio / Levels</td><td>L3 — system-agnostic business process. Inherits from Feature.</td></tr>
+      <tr><td><strong>Scenario</strong></td><td><span class="cat-badge cat-process">BPC Hierarchy</span></td><td>Portfolio / Lowest</td><td>L4 — application-specific process step. Primary traceability unit. Carries Scope, Fit Gap, SbD phase, menu path.</td></tr>
+      <tr><td><strong>System process</strong></td><td><span class="cat-badge cat-process">BPC Hierarchy</span></td><td>Portfolio / Lowest</td><td>L5 — form/page-level granularity within a Scenario. Inherits from User Story.</td></tr>
+      <tr><td><strong>Functional area</strong></td><td><span class="cat-badge cat-process">BPC Hierarchy</span></td><td>Portfolio / Highest</td><td>Grouping node in the Deliverables tree (e.g. Accounts Payable, Inventory).</td></tr>
+      <!-- DELIVERABLES -->
+      <tr><td><strong>Configuration</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>System setup without development code. Carries config type, config keys, mandatory flags.</td></tr>
+      <tr><td><strong>Enhancement</strong></td><td><span class="cat-badge cat-dev">Deliverable</span></td><td>Requirements / Deliverables</td><td>Development work required to extend standard functionality. ≈ Customisation.</td></tr>
+      <tr><td><strong>Integration</strong></td><td><span class="cat-badge cat-dev">Deliverable</span></td><td>Requirements / Deliverables</td><td>Data exchange between two or more systems. Carries interface mode, middleware, volume fields.</td></tr>
+      <tr><td><strong>Migration</strong></td><td><span class="cat-badge cat-dev">Deliverable</span></td><td>Requirements / Deliverables</td><td>Data migration from legacy or external system. Carries source/target system, migration method, cleansing fields.</td></tr>
+      <tr><td><strong>Documentation</strong></td><td><span class="cat-badge cat-docs">Deliverable</span></td><td>Requirements / Deliverables</td><td>SOP / business process document. Communicates policy and how-to for routine operations.</td></tr>
+      <tr><td><strong>Security</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>Security object configuration (roles, duties, privileges).</td></tr>
+      <tr><td><strong>Report</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>Report, dashboard, or analytic. Carries report type, technology (Power BI, SSRS), audience.</td></tr>
+      <tr><td><strong>Workflow</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>Approval, automation, or alert workflow. Carries workflow type, approval levels.</td></tr>
+      <tr><td><strong>Job</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>Scheduled background batch job. Carries job type, execution frequency.</td></tr>
+      <tr><td><strong>Environment</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>IT infrastructure item (hardware, network, security). Lightweight tracking.</td></tr>
+      <tr><td><strong>Infrastructure</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>Broader IT infrastructure deliverable. Overlaps with Environment; used for larger-scope items.</td></tr>
+      <tr><td><strong>User interface</strong></td><td><span class="cat-badge cat-config">Deliverable</span></td><td>Requirements / Deliverables</td><td>UI personalisation / form customisation. ≈ Personalisation.</td></tr>
+      <tr><td><strong>Deliverable</strong></td><td><span class="cat-badge cat-deliv">Deliverable</span></td><td>Requirements / Deliverables</td><td>Generic deliverable type (BPC, Solution Blueprint, Delivery Plan, Readiness Assessment).</td></tr>
+      <tr><td><strong>Requirement</strong></td><td><span class="cat-badge cat-deliv">Deliverable</span></td><td>Requirements / Deliverables</td><td>A business requirement capturing how the system must function. Carries Requirement mapping field to link to resolving deliverables. ≈ BRD line item.</td></tr>
+      <tr><td><strong>Testing</strong></td><td><span class="cat-badge cat-deliv">Deliverable</span></td><td>Requirements / Deliverables</td><td>Testing event work product in the Delivery Plan (e.g. SIT, UAT event).</td></tr>
+      <!-- PM TYPES -->
+      <tr><td><strong>Phase</strong></td><td><span class="cat-badge cat-pm">PM</span></td><td>Portfolio / Lowest</td><td>Partner project phase placed in the Delivery Plan for timeline view. Carries Duration field.</td></tr>
+      <tr><td><strong>Workshop</strong></td><td><span class="cat-badge cat-pm">PM</span></td><td>Requirements / Deliverables</td><td>Facilitated meeting. Carries Agenda, Key Questions, Workshop Assumptions, Scheduling Notes. ≈ CRP / JAD.</td></tr>
+      <tr><td><strong>Task</strong></td><td><span class="cat-badge cat-pm">PM</span></td><td>Iteration / Tasks</td><td>Standard ADO task. Carries estimate, remaining work, activity type.</td></tr>
+      <tr><td><strong>Action item</strong></td><td><span class="cat-badge cat-pm">PM</span></td><td>Iteration / Tasks</td><td>Quick action not requiring estimation. Must be assigned.</td></tr>
+      <tr><td><strong>Business task</strong></td><td><span class="cat-badge cat-pm">PM</span></td><td>Iteration / Tasks</td><td>Task integrated with Mavim to assign work to business users. Carries Mavim ID.</td></tr>
+      <tr><td><strong>Objective</strong></td><td><span class="cat-badge cat-pm">PM</span></td><td>No backlog</td><td>Sprint or Tollgate goal. Contains Postmortem field. ≈ PI Objective / Sprint Goal.</td></tr>
+      <!-- RISK/GOVERNANCE -->
+      <tr><td><strong>Risk</strong></td><td><span class="cat-badge cat-pm">Governance</span></td><td>No backlog</td><td>Potential negative event. Carries probability, impact severity, risk category, risk response, mitigation plan. ≈ RAID Risk.</td></tr>
+      <tr><td><strong>Issue</strong></td><td><span class="cat-badge cat-pm">Governance</span></td><td>No backlog</td><td>Problem that has already occurred. Carries impact, resolution. ≈ RAID Issue.</td></tr>
+      <tr><td><strong>Assumption</strong></td><td><span class="cat-badge cat-pm">Governance</span></td><td>No backlog</td><td>A stated assumption with next steps. ≈ RAID Assumption.</td></tr>
+      <tr><td><strong>Decision</strong></td><td><span class="cat-badge cat-pm">Governance</span></td><td>No backlog</td><td>Logged decision with decision maker identity. ≈ RAID Decision / Decision Register.</td></tr>
+      <tr><td><strong>Change request</strong></td><td><span class="cat-badge cat-pm">Governance</span></td><td>No backlog</td><td>Formal scope/schedule/budget change. Carries CR type, requestor, change order number. ≈ Change Order.</td></tr>
+      <tr><td><strong>Ticket</strong></td><td><span class="cat-badge cat-pm">Support</span></td><td>No backlog</td><td>Support request (break/fix, config change). Carries support level, resolution type. ≈ Helpdesk ticket / CE Case.</td></tr>
+      <tr><td><strong>Bug</strong></td><td><span class="cat-badge cat-test">Test</span></td><td>No backlog</td><td>Defect — divergence between required and actual behaviour. Links via Related Links back to BPC Scenario. ≈ Defect.</td></tr>
+      <tr><td><strong>Status report</strong></td><td><span class="cat-badge cat-pm">PM</span></td><td>No backlog</td><td>Status report cover page content with linked ADO queries/dashboards as addendums.</td></tr>
+      <!-- TEST -->
+      <tr><td><strong>Test plan</strong></td><td><span class="cat-badge cat-test">Test</span></td><td>No backlog</td><td>ADO native — tracks testing for a milestone/release. Root of the test hierarchy.</td></tr>
+      <tr><td><strong>Test suite</strong></td><td><span class="cat-badge cat-test">Test</span></td><td>No backlog</td><td>ADO native — tracks testing for a feature or requirement. Child of Test plan.</td></tr>
+      <tr><td><strong>Test case</strong></td><td><span class="cat-badge cat-test">Test</span></td><td>Portfolio / Kanban</td><td>Detailed step-by-step test script (field by field, click by click). Linked to BPC Scenario.</td></tr>
+      <tr><td><strong>Folder</strong></td><td><span class="cat-badge cat-pm">Structure</span></td><td>Portfolio / Lowest</td><td>Generic grouping node for organising large item lists. No process meaning of its own.</td></tr>
+      <tr><td colspan="4" style="color:var(--accent4); font-size:12px; padding:10px 14px;">⊘ <strong>Disabled WITs</strong> — Epic, Feature, User Story: replaced by BPC hierarchy. Not used in any backlog.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     PHASES
+═══════════════════════════════════════════════════════════ -->
+<section id="phases">
+  <div class="section-title">Section 04</div>
+  <div class="section-head">SbD Lifecycle Phases</div>
+  <div class="section-sub">Success by Design defines five phases. Each maps to antecedent phases from Microsoft Sure Step and traditional PMBOK, and to SAFe cadence constructs. The "Partner phase" field on BPC items lets you map your own phases to the SbD standard.</div>
+
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-num">01</div>
+      <div class="phase-name" style="color:#58a6ff">Strategize</div>
+      <div class="phase-sure">Sure Step: Diagnostic · SAFe: PI Planning</div>
+      <div class="phase-desc">Vision, transformation roadmap, change management strategy, organisational readiness, high-level scope confirmation.</div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">02</div>
+      <div class="phase-name" style="color:var(--accent2)">Initiate</div>
+      <div class="phase-sure">Sure Step: Analysis · PMBOK: Planning Gate</div>
+      <div class="phase-desc">Project mobilisation, governance setup, initial BPC scoping, environment provisioning, team onboarding.</div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">03</div>
+      <div class="phase-name" style="color:var(--goals)">Implement</div>
+      <div class="phase-sure">Sure Step: Design + Development · Agile: Sprints</div>
+      <div class="phase-desc">Iterative fit-to-standard workshops → configuration → enhancement → integration → migration development. Core delivery phase, runs in an iterative cadence of Sprints grouped into Iterations, each closing with a Tollgate review.</div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">04</div>
+      <div class="phase-name" style="color:var(--accent3)">Prepare</div>
+      <div class="phase-sure">Sure Step: Deployment · SAP: ASAP Preparation</div>
+      <div class="phase-desc">UAT (User Acceptance Testing), cutover planning, data migration runs, training, go-live readiness review, hypercare setup.</div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">05</div>
+      <div class="phase-name" style="color:var(--plan)">Operate</div>
+      <div class="phase-sure">Sure Step: Operation · PMBOK: Closure Gate</div>
+      <div class="phase-desc">Post-go-live hypercare, support transition, lessons learned, continuous improvement, project closure.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <h4 class="sub-heading">Cadence Constructs Within Implement</h4>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-label" style="color:var(--accent3)">Tollgate</span>
+      <h3>Tollgate — Review Checkpoint</h3>
+      <p>A go/no-go review event at the end of a delivery period. It is the <em>checkpoint</em>, not the time container. The cadence period (the group of Sprints leading up to it) is the iteration. <strong>≈ Stage Gate (PMBOK) / Phase Gate (Sure Step) / PI Review event (SAFe).</strong> Note: DAC's PMO calls this construct "Stage Gate".</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--why)">Iteration</span>
+      <h3>Iteration — Time Container</h3>
+      <p>The delivery period that leads up to a Tollgate review. Contains multiple Sprints. In the ADO iteration path hierarchy, this is the parent level (e.g. "Tollgate 1") that holds Sprint children. <strong>≈ Program Increment / PI (SAFe) / Release (Scrum).</strong> The distinction matters: the Tollgate is the gate at the end; the Iteration is the block of time before it.</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--text2)">Sprint</span>
+      <h3>Sprint — Time-box</h3>
+      <p>Standard two-week Agile time-box within an Iteration. Carries sprint-level start/end dates in the ADO iteration path. <strong>≈ Scrum Sprint / Agile Iteration.</strong></p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--accent2)">Workshop Pattern</span>
+      <h3>Scenario Board → Storyline Review</h3>
+      <p>Two-workshop pattern per end-to-end: <br><strong>(1)</strong> Scenario Board Discovery — scope and happy path alignment.<br><strong>(2)</strong> Storyline Design Review — fit-to-standard demo, 80–90% acceptance target. Detailed Design Workshops follow and produce the FDDs.</p>
+    </div>
+    <div class="card">
+      <span class="card-label" style="color:var(--goals)">SbD Phase Field</span>
+      <h3>SbD Phase on BPC Items</h3>
+      <p>Each BPC Scenario carries a "Success by Design phase" field indicating which implementation phase it should be delivered in. Defaults to <strong>Undetermined</strong> in the source BPC data — requires manual population during delivery planning or sprint assignment. Not auto-populated by Microsoft.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     LEGACY MAPPING
+═══════════════════════════════════════════════════════════ -->
+<section id="rebrand">
+  <div class="section-title">Section 05</div>
+  <div class="section-head">Legacy Term Mapping</div>
+  <div class="section-sub">SbD draws vocabulary from five prior frameworks. This table maps current SbD terms to their antecedents so that stakeholders from different backgrounds can orient quickly.</div>
+
+  <div class="callout">
+    Terms shown in <span style="color:var(--accent2)">teal</span> are current SbD vocabulary. Terms in <span style="color:var(--accent3)">amber</span> are the legacy equivalents. Framework badges indicate the source methodology.
+  </div>
+
+  <table class="rebrand-table">
+    <thead>
+      <tr>
+        <th style="width:22%">SbD Term</th>
+        <th style="width:22%">Legacy / Prior Term</th>
+        <th style="width:20%">Source Framework(s)</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="sbd-term">Business Process Catalog (BPC)</span></td>
+        <td><span class="legacy-term">Business Blueprint</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">Microsoft-published, versioned, APQC-aligned hierarchy of all D365 processes. Replaces partner-authored blueprints.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">End to end</span></td>
+        <td><span class="legacy-term">Business Scenario / Category</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">APQC</span></td>
+        <td class="notes-cell">Top-level domain (e.g. Acquire to dispose, Source to pay). System-agnostic. APQC Category equivalent.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Process area</span></td>
+        <td><span class="legacy-term">Business Process Group</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">APQC</span></td>
+        <td class="notes-cell">L2 grouping within an end-to-end. Maps to APQC Process Group.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Process</span></td>
+        <td><span class="legacy-term">Business Process</span></td>
+        <td><span class="framework-badge">APQC</span><span class="framework-badge">SAP ASAP</span></td>
+        <td class="notes-cell">L3 — still system-agnostic. Inherits from ADO Feature WIT (which is disabled for direct use).</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Scenario (L4)</span></td>
+        <td><span class="legacy-term">User Story · Process Step · Transaction</span></td>
+        <td><span class="framework-badge">Agile/Scrum</span><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">Application-specific — names the D365 module variant. The primary unit of traceability, scope, and test coverage.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">System process (L5)</span></td>
+        <td><span class="legacy-term">Sub-task · Screen / Transaction</span></td>
+        <td><span class="framework-badge">Agile</span><span class="framework-badge">SAP ASAP</span></td>
+        <td class="notes-cell">Form/page-level granularity. Inherits from User Story WIT (which is disabled for direct use).</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Tollgate</span></td>
+        <td><span class="legacy-term">Stage Gate · Phase Gate · Go/No-Go Review</span></td>
+        <td><span class="framework-badge">PMBOK</span><span class="framework-badge">Sure Step</span><span class="framework-badge">Prince2</span></td>
+        <td class="notes-cell">A go/no-go review <em>event</em> at the end of a delivery period — a checkpoint, not a time container. DAC's PMO calls the same construct "Stage Gate." The SAFe Program Increment (PI) is different: it is the <em>time container</em> (the multi-sprint cadence period) that leads up to a review, not the review itself.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Objective</span></td>
+        <td><span class="legacy-term">PI Objective · Sprint Goal · Milestone</span></td>
+        <td><span class="framework-badge">SAFe</span><span class="framework-badge">Scrum</span><span class="framework-badge">PMBOK</span></td>
+        <td class="notes-cell">Tollgate/Sprint-scoped goal. Contains Postmortem field for retrospective notes on close.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Workshop (Scenario Board Discovery)</span></td>
+        <td><span class="legacy-term">Conference Room Pilot (CRP) · JAD Session · Fit/Gap Workshop</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Sure Step</span><span class="framework-badge">Traditional</span></td>
+        <td class="notes-cell">First of two structured workshops per E2E. Output is agreed scope and the "happy path" (primary storyline).</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Workshop (Storyline Design Review)</span></td>
+        <td><span class="legacy-term">CRP · Prototype Walkthrough · Solution Review</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">Second workshop — live D365 demo of the happy path. Targets 80–90% acceptance. The live demo shifts the acceptance mechanism away from a formal FRS document sign-off toward stakeholder validation against the running system. FDDs are still produced in subsequent Detailed Design workshops.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Fit-to-Standard (philosophy)</span></td>
+        <td><span class="legacy-term">Fit/Gap Analysis (technique) — separate, coexisting</span></td>
+        <td><span class="framework-badge">SbD philosophy</span><span class="framework-badge">Traditional ERP</span></td>
+        <td class="notes-cell"><strong>These are not synonyms and Fit-to-Standard does not replace Fit/Gap.</strong> Fit-to-Standard is SbD's guiding principle: default to standard D365 processes and adapt the business rather than customising the system. Fit/Gap is the analytical technique for identifying where the system fits requirements vs. where gaps exist. SbD still performs Fit/Gap analysis — the <em>Fit gap status</em> field (Fit / Gap / Partial fit) exists on every Scenario WIT precisely for this purpose. The two coexist: you run the fit/gap analysis, but your starting bias is always "fit to standard first."</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Storyline / Happy Path</span></td>
+        <td><span class="legacy-term">Happy Path · Primary Use Case · Key Scenario</span></td>
+        <td><span class="framework-badge">General</span><span class="framework-badge">UML</span></td>
+        <td class="notes-cell">The agreed end-to-end process walkthrough from the Scenario Board. Basis for the design review demo.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Enhancement</span></td>
+        <td><span class="legacy-term">Customisation · ISV · Development / RICEF</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Traditional ERP</span></td>
+        <td class="notes-cell">SAP used "RICEFW" (Reports, Interfaces, Conversions, Enhancements, Forms, Workflows). SbD splits these into separate WITs.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Integration</span></td>
+        <td><span class="legacy-term">Interface (RICEFW "I") · iDoc · AIF</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Traditional ERP</span></td>
+        <td class="notes-cell">Carries middleware, interface mode, volume, and technology fields. No longer lumped into a generic "customisation" bucket.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Migration</span></td>
+        <td><span class="legacy-term">Data Conversion (RICEFW "C") · Legacy Data Load</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Traditional ERP</span></td>
+        <td class="notes-cell">Carries source/target system, data type, migration method, transformation technology, cleansing approach.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Documentation</span></td>
+        <td><span class="legacy-term">Business Process Document (BPD) · SOP · Work Instruction</span></td>
+        <td><span class="framework-badge">Traditional ERP</span><span class="framework-badge">ISO</span></td>
+        <td class="notes-cell">End-user-facing policy and procedure documentation. In the Deliverables tree; also appears in Delivery Plan as named design docs.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Requirement</span></td>
+        <td><span class="legacy-term">BRD line item · Functional Requirement · User Requirement</span></td>
+        <td><span class="framework-badge">PMBOK</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">Carries "Requirement mapping" field linking it to the deliverables that satisfy it. Less prominent in SbD than in waterfall methodologies.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">RAID (split across 5 WITs)</span></td>
+        <td><span class="legacy-term">RAID Log (single spreadsheet/register)</span></td>
+        <td><span class="framework-badge">PMBOK</span><span class="framework-badge">Prince2</span></td>
+        <td class="notes-cell">SbD distributes RAID into individual WITs: <strong>Risk, Issue, Assumption, Decision, Change request</strong> — each with type-specific fields, states, and owners.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Delivery Plan (tree)</span></td>
+        <td><span class="legacy-term">Project Plan · WBS · Implementation Roadmap</span></td>
+        <td><span class="framework-badge">PMBOK</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">ADO Delivery Plans feature provides a timeline/Gantt view of the tree. Phase WIT carries Duration field.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Scope approach field + Documentation WIT</span></td>
+        <td><span class="legacy-term">Functional Design Document (FDD) · Functional Specification (FS)</span></td>
+        <td><span class="framework-badge">Traditional ERP</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">SbD still produces FDDs — they are not eliminated. The <em>Scope approach</em> HTML field on a Scenario WIT is a brief in-workshop write-up of the proposed solution approach (a few paragraphs). The actual FDD is a separate, standalone deliverable: a <strong>Documentation</strong> or <strong>Deliverable</strong> WIT in the What tree, or a named "xx.02.004 Design document" item in the Delivery Plan, produced as output from the Detailed Design workshops that follow the Storyline Review. The chain is: Scenario Board scopes it → Scope approach captures the summary → Detailed Design Workshop produces the full FDD.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Test plan → Test suite → Test case</span></td>
+        <td><span class="legacy-term">Test Strategy → Test Script / Test Script Step</span></td>
+        <td><span class="framework-badge">Traditional</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">ADO native hierarchy. Test Cases are field-by-field, click-by-click scripts linked to BPC Scenarios via Related Links.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Bug → linked to Scenario</span></td>
+        <td><span class="legacy-term">Defect · Issue (testing) · NCR</span></td>
+        <td><span class="framework-badge">General</span><span class="framework-badge">Testing</span></td>
+        <td class="notes-cell">Non-hierarchical Related Link connects Bug back to the BPC Scenario that defines the expected behaviour. This is the permanent post-go-live traceability mechanism.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Strategize phase</span></td>
+        <td><span class="legacy-term">Diagnostic phase · Pre-Sales</span></td>
+        <td><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">First SbD phase. Previously "Diagnostic" in Sure Step. Focuses on vision, change management, and transformation roadmap.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Prepare phase</span></td>
+        <td><span class="legacy-term">Deployment phase · Go-Live Preparation</span></td>
+        <td><span class="framework-badge">Sure Step</span><span class="framework-badge">SAP ASAP</span></td>
+        <td class="notes-cell">UAT, data migration final runs, training, cutover. ≈ Sure Step "Deployment" / SAP ASAP "Final Preparation".</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Solution Blueprint</span></td>
+        <td><span class="legacy-term">Business Blueprint · Solution Architecture Document</span></td>
+        <td><span class="framework-badge">SAP ASAP</span><span class="framework-badge">Sure Step</span></td>
+        <td class="notes-cell">High-level architecture and design artefact — scope, integration landscape, data migration approach, security model. Not an FDD; the FDD is a more detailed document produced later in Detailed Design workshops. In SbD, the Solution Blueprint is partly replaced by the BPC itself (for process scope) and the "xx.02.004 Design document" deliverable in the Delivery Plan (for architecture). The FDD remains a separate downstream output.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Functional area</span></td>
+        <td><span class="legacy-term">Module · Department · Organisational Unit</span></td>
+        <td><span class="framework-badge">Traditional ERP</span></td>
+        <td class="notes-cell">SbD groups deliverables and Objectives by functional area (Accounts Payable, Inventory etc.) rather than by ERP module names.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">APQC ID / APQC Description</span></td>
+        <td><span class="legacy-term">Process Reference Model (PRM) code</span></td>
+        <td><span class="framework-badge">APQC PCF</span></td>
+        <td class="notes-cell">Optional cross-reference to the APQC Process Classification Framework. Enables industry benchmarking and external process comparison.</td>
+      </tr>
+      <tr>
+        <td><span class="sbd-term">Business task (Mavim)</span></td>
+        <td><span class="legacy-term">Business Process Task / Workflow Task</span></td>
+        <td><span class="framework-badge">Mavim BPM</span></td>
+        <td class="notes-cell">Task type that integrates with the Mavim business process management tool, allowing business users to receive and action tasks directly in Mavim.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     KEY FIELDS
+═══════════════════════════════════════════════════════════ -->
+<section id="fields">
+  <div class="section-title">Section 06</div>
+  <div class="section-head">Key Field Reference</div>
+  <div class="section-sub">Custom fields use the MSBPC reference name prefix. Standard ADO fields have Microsoft.VSTS prefixes. Fields marked ★ are particularly important for DAC's BPC traceability and scoping workflows.</div>
+
+  <h4 class="sub-heading">BPC Traceability & Scoping Fields</h4>
+  <div class="fields-grid">
+    <div class="field-card">
+      <div class="field-name">Scope MS BPC ★</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">In scope / Out of scope / TBD. Required field on Scenario WIT. Core to scoping workshops and burndown tracking.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Fit gap status MS BPC ★</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Fit / Gap / Partial fit / Unspecified. Captures the outcome of Fit/Gap analysis directly on the Scenario WIT in ADO, rather than in a standalone spreadsheet. The analysis itself is still performed — this field records the result. Drives Enhancement/Configuration deliverable creation.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Gap solution approach MS BPC</div>
+      <div class="field-type">Picklist (conditional)</div>
+      <div class="field-desc">Required when Fit Gap = Gap. Options include Customization, Third-party solution, Process change, Workaround.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Success by Design phase</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Maps each BPC item to the SbD phase in which it should be configured/delivered (Strategize, Initiate, Implement, Prepare, Operate). <strong>Defaults to "Undetermined"</strong> in all Microsoft-supplied BPC source data — Microsoft does not pre-populate this. Requires manual population by the project team during delivery planning, typically as part of sprint or Tollgate assignment.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Partner phase</div>
+      <div class="field-type">Picklist (conditional)</div>
+      <div class="field-desc">Partner's own phase label, mapped to SbD phases. DAC can populate this with DAC-specific phase names for client-facing comms.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Scope approach MS BPC</div>
+      <div class="field-type">HTML</div>
+      <div class="field-desc">Brief write-up captured during the workshop about how the solution will address this Scenario. A summary/precursor, not a replacement for the FDD — the full Functional Design Document is a separate Documentation/Deliverable WIT produced in later Detailed Design workshops.</div>
+    </div>
+  </div>
+
+  <h4 class="sub-heading">BPC Cataloguing & Versioning Fields</h4>
+  <div class="fields-grid">
+    <div class="field-card">
+      <div class="field-name">Microsoft ID MS BPC ★</div>
+      <div class="field-type">Text (single line)</div>
+      <div class="field-desc">Microsoft's internal unique ID for the BPC item (e.g. d6689987c110v0). Used to match and take updates from new BPC releases. Read-only after import.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Process sequence ID MS BPC</div>
+      <div class="field-type">Text (single line)</div>
+      <div class="field-desc">Hierarchical decimal ID (e.g. 10.05.010.100). Encodes the BPC level and position. Used for ordering and cross-referencing.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Catalog status MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">New / Updated / Deprecated / Published. Tracks Microsoft's release state. "Updated" = changed in this BPC version release.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Article status MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Status of the corresponding Microsoft Learn article: Not started → Drafted → Published. Sourced from Microsoft.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Business process flow status MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Status of the process flow diagram published to GitHub: Not started → In progress → Published.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Update comments MS BPC</div>
+      <div class="field-type">HTML (conditional)</div>
+      <div class="field-desc">Required when Catalog status = Updated. Documents what changed in this BPC revision (e.g. "Added: Application family | Changed: Description").</div>
+    </div>
+  </div>
+
+  <h4 class="sub-heading">Application & Module Classification</h4>
+  <div class="fields-grid">
+    <div class="field-card">
+      <div class="field-name">Application family MS BPC ★</div>
+      <div class="field-type">Picklist (multi-select)</div>
+      <div class="field-desc">Business Central / Finance and Operations / Customer Engagement / Productivity. For BC-only projects, filter to Business Central only at import time.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Products MS BPC ★</div>
+      <div class="field-type">Picklist (multi-select)</div>
+      <div class="field-desc">Specific D365 product (e.g. Business Central, Finance, Supply Chain Management, Field Service). Used alongside Application family for precise filtering.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Module MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">D365 module (Accounts payable, Inventory management, etc.). More granular than Application family.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Menu path / Menu item name</div>
+      <div class="field-type">Text (single line) × 2</div>
+      <div class="field-desc">Navigation path in the application (required on Scenario and Configuration). Used for training documentation and test script navigation.</div>
+    </div>
+  </div>
+
+  <h4 class="sub-heading">Workshop & Planning Fields</h4>
+  <div class="fields-grid">
+    <div class="field-card">
+      <div class="field-name">Agenda MS BPC</div>
+      <div class="field-type">HTML</div>
+      <div class="field-desc">Workshop agenda template. Pre-populated by Microsoft for each standard Workshop WIT in the Delivery Plan.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Key questions MS BPC</div>
+      <div class="field-type">HTML</div>
+      <div class="field-desc">Structured question set for the workshop. Pre-populated by Microsoft. Facilitator reference during Scenario Board or Design Review sessions.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Workshop assumptions MS BPC</div>
+      <div class="field-type">HTML</div>
+      <div class="field-desc">Pre-conditions and stakeholder pre-requisites for a workshop. Populated by Microsoft in the standard template.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Scheduling notes MS BPC</div>
+      <div class="field-type">HTML</div>
+      <div class="field-desc">Guidance on when and how long to schedule the workshop, including recommended stakeholders.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Baseline complexity MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Microsoft's suggested effort baseline (Simple / Medium / Complex) for the deliverable. Starting point for estimation.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Postmortem MS BPC</div>
+      <div class="field-type">HTML</div>
+      <div class="field-desc">On Objective WIT — retrospective summary of how well the Tollgate/Sprint goal was achieved. ≈ Sprint Retrospective note.</div>
+    </div>
+  </div>
+
+  <h4 class="sub-heading">Risk, Issue, Decision Fields</h4>
+  <div class="fields-grid">
+    <div class="field-card">
+      <div class="field-name">Risk category MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Categorises the nature of the risk (e.g. Schedule, Budget, Resource, Technical, Compliance).</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Risk response MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Mitigation approach: Accept / Avoid / Transfer / Mitigate. ≈ PMBOK risk response strategies.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Probability</div>
+      <div class="field-type">Integer (%)</div>
+      <div class="field-desc">Estimated likelihood of a risk occurring. Standard CMMI field.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Decision maker MS BPC</div>
+      <div class="field-type">Identity</div>
+      <div class="field-desc">Individual who made the logged Decision. Provides accountability audit trail.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Change request type MS BPC</div>
+      <div class="field-type">Picklist</div>
+      <div class="field-desc">Category of change: Scope / Schedule / Budget / Quality. Maps to DAC's Change Request Management Policy.</div>
+    </div>
+    <div class="field-card">
+      <div class="field-name">Change order MS BPC</div>
+      <div class="field-type">Text</div>
+      <div class="field-desc">Reference number of the approved change order. Links ADO Change Request WIT to the commercial/PMO instrument.</div>
+    </div>
+  </div>
+</section>
+
+<script>
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
